@@ -1,0 +1,147 @@
+<section class="h-100 py-md-3">
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <div class="d-flex align-items-center">
+                            <h6 class="mb-0">Update Profile</h6>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-sm text-primary">User Information</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" formControlName="id" [ngClass]="{
+                                        'is-invalid': form.get('id')?.touched && form.get('id')?.invalid,
+                                        'border-success': true }" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Middle Initial</label>
+                                    <input type="text" maxlength="1" class="form-control"
+                                        formControlName="middleInitial" [ngClass]="{
+                                        'is-invalid': form.get('middleInitial')?.touched && form.get('middleInitial')?.invalid,
+                                        'border-success': true }" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" formControlName="firstName" [ngClass]="{
+                                    'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid,
+                                    'border-success': true }" readonly>
+
+                                    <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('firstName', 'First name')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" formControlName="lastName" [ngClass]="{
+                                    'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid,
+                                    'border-success': true }" readonly>
+
+                                    <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('lastName', 'Last name')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" formControlName="password" [ngClass]="{
+                                    'is-invalid': form.get('password')?.touched && form.get('password')?.invalid,
+                                    'is-valid': form.get('password')?.touched && form.get('password')?.valid
+                                  }" autocomplete="new-password">
+                                    <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngIf="form.get('password')?.errors?.['invalidPassword']">
+                                            Password must be at least 6
+                                            characters
+                                            with at least one uppercase letter, one number, and one special
+                                            character.
+                                        </div>
+                                        <div *ngFor="let error of getControlError('password', 'Password')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="horizontal dark my-2">
+                        <p class="text-sm text-primary">Contact Information</p>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label">Street Address</label>
+                                    <input type="text" class="form-control" formControlName="streetAddress" [ngClass]="{
+                                    'is-invalid': form.get('streetAddress')?.touched && form.get('streetAddress')?.invalid,
+                                    'is-valid': form.get('streetAddress')?.touched && form.get('streetAddress')?.valid
+                                  }">
+                                    <div *ngIf="form.get('streetAddress')?.touched && form.get('streetAddress')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('streetAddress', 'Street address')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" formControlName="city" [ngClass]="{
+                                    'is-invalid': form.get('city')?.touched && form.get('city')?.invalid,
+                                    'is-valid': form.get('city')?.touched && form.get('city')?.valid
+                                  }">
+                                    <div *ngIf="form.get('city')?.touched && form.get('city')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('city', 'City')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">Postal Code</label>
+                                    <input type="text" class="form-control" formControlName="postalCode" [ngClass]="{
+                                    'is-invalid': form.get('city')?.touched && form.get('postalCode')?.invalid,
+                                    'is-valid': form.get('city')?.touched && form.get('postalCode')?.valid
+                                  }">
+                                    <div *ngIf="form.get('postalCode')?.touched && form.get('postalCode')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngIf="form.get('postalCode')?.errors?.['pattern']">
+                                            Postal code must be in the format A1A 1A1
+                                        </div>
+                                        <div *ngFor="let error of getControlError('postalCode', 'Postal code')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex flex-wrap justify-content-end p-0 gap-2">
+                                <button type="reset" class="btn btn-danger mb-0" (click)="loadPersonalInfo()">Reset</button>
+                                <button type="submit" class="btn btn-primary mb-0">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

@@ -1,0 +1,144 @@
+@uri = http://localhost:5130/api
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZmlyc3ROYW1lIjoiU2V1bCIsImxhc3ROYW1lIjoiV29vIiwicm9sZSI6IkhSU3VwZXJ2aXNvciIsIm5iZiI6MTc0NzA2NDk3OCwiZXhwIjoxNzQ3NjY5Nzc4LCJpYXQiOjE3NDcwNjQ5Nzh9.xr3xlNf5wjXBHiGn30hZ_v5Tsp4zTTbRsKFuXrQc2rlLngsQkmRXGmOe5SHl3Fcqn-MNYkgZaFmzbwAc1HbqtQ
+
+### GET ALL DEPARTMENTS spGetAllDepartments
+GET {{uri}}/departments
+Accept: application/json
+Authorization: {{token}}
+
+### CREATE DEPARTMENT
+POST {{uri}}/departments
+Content-Type: application/json
+Authorization: {{token}}
+{
+  "Name": "Test",
+  "Description": "test",
+  "InvocationDate": "2025-05-07"
+}
+
+### GET ALL EMPLOYEES
+GET {{uri}}/employees/search
+Content-Type: application/json
+Authorization: {{token}}
+
+### FILTER EMPLOYEES WITH QUERY
+GET {{uri}}/employees/search?DepartmentID=2&EmployeeID=00000002&Name=w
+Content-Type: application/json  
+Authorization: {{token}}
+
+### GET ALL JOBS
+GET {{uri}}/jobs
+Content-Type: application/json  
+
+### CREATE EMPLOYEE (VALIDATION ERRORS)
+POST {{uri}}/employees
+Content-Type: application/json
+Authorization: {{token}}
+{
+  "Password": "Demo1!",
+  "FirstName": "S",
+  "LastName": "G",
+  "MiddleInitial" : "s",
+  "StreetAddress": "",
+  "City" : "s",
+  "PostalCode": "E1c 7z6",
+  "DOB": "2024-06-07",
+  "SIN": "123456789",
+  "SeniorityDate": "2025-04-02",
+  "JobStartDate" : "2025-04-01",
+  "WorkPhone": "(123) 121 1211 1",
+  "CellPhone": "",
+  "Email": "testdevcodenb.com",
+  "OfficeLocation": ""
+}
+
+### CREATE EMPLOYEE (HAPPY PATH) CEO
+POST {{uri}}/employees
+Content-Type: application/json
+Authorization: {{token}}
+{
+  "Password": "Password123!",
+  "FirstName": "Test1",
+  "LastName": "Test",
+  "StreetAddress": "Hastings",
+  "City" : "Moncton",
+  "PostalCode": "E1C 7X6",
+  "DOB": "1996-06-07",
+  "SIN": "223456789",
+  "SeniorityDate": "2025-04-02",
+  "JobStartDate" : "2025-04-03",
+  "WorkPhone": "(123) 121 1211",
+  "CellPhone": "(123) 121 1211",
+  "Email": "test1dev@codenb.com",
+  "OfficeLocation": "ABC 123",
+  "JobID": 1
+}
+
+### CREATE EMPLOYEE (HAPPY PATH) REG EMPLOYEE
+POST {{uri}}/employees
+Content-Type: application/json
+Authorization: {{token}}
+{
+  "Password": "Password123!",
+  "FirstName": "Reg11",
+  "LastName": "Test",
+  "StreetAddress": "Hastings",
+  "City" : "Moncton",
+  "PostalCode": "E1C 7X6",
+  "DOB": "1996-06-07",
+  "SIN": "214 123 345",
+  "SeniorityDate": "2025-04-02",
+  "JobStartDate" : "2025-04-03",
+  "WorkPhone": "(123) 121 1211",
+  "CellPhone": "(123) 121 1211",
+  "Email": "test1dev@codenb.com",
+  "OfficeLocation": "ABC 123",
+  "DepartmentID": 2,
+  "SupervisorId": 2,
+  "JobID": 2
+}
+
+### GET EMPLOYEE ASSIGNMENT
+GET {{uri}}/employees/4/assignment
+Authorization: {{token}}
+Content-Type: application/json  
+
+### GET ALL SUPERVISORS
+GET {{uri}}/employees/supervisors
+Authorization: {{token}}
+Content-Type: application/json  
+
+
+### POST ADD PO_ITEMS
+POST {{uri}}/PurchaseOrder
+Content-Type: application/json
+{
+  "items": [
+    {
+      "itemName": "testing Laptop",
+      "itemDescription": "Dell XPS 13, 16GB RAM",
+      "itemQuantity": 4,
+      "itemPrice": 1200.00,
+      "itemJustification": "New employee onboarding",
+      "itemPurchaseLocation": "Moncton"
+    },
+    {
+      "itemName": "Monitor",
+      "itemDescription": "24 inch LED",
+      "itemQuantity": 1,
+      "itemPrice": 250.00,
+      "itemJustification": "Office upgrade",
+      "itemPurchaseLocation": "Fredericton"
+    }
+  ]
+}
+
+### LOGIN
+POST {{uri}}/auth/login
+Content-Type: application/json
+{
+  "Username": "00000002",
+  "Password": "Password123!"
+}
+
+

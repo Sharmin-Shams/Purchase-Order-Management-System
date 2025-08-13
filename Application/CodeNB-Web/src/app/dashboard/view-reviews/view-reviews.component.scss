@@ -1,0 +1,17 @@
+.reviews {
+  max-width: 700px;
+
+  .badge {
+    font-size: 0.6rem !important;
+    min-width: 60px;
+  }
+
+  li {
+    &:hover {
+      cursor: pointer;
+      h6:not(.badge) {
+        text-decoration: underline;
+      }
+    }
+  }
+}

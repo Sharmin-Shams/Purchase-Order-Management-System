@@ -1,0 +1,9 @@
+package com.example.codenb.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class LoginDto(
+    val username: String,
+    val password: String
+)

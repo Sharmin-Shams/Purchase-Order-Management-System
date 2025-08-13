@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeNB.Model\CodeNB.Model.csproj" />
+    <ProjectReference Include="..\CodeNB.Repository\CodeNB.Repository.csproj" />
+    <ProjectReference Include="..\CodeNB.Types\CodeNB.Types.csproj" />
+    <ProjectReference Include="..\EmailServices\EmailServices.csproj" />
+  </ItemGroup>
+
+</Project>

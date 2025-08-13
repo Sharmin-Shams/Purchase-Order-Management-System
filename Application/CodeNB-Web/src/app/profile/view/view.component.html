@@ -1,0 +1,46 @@
+<section>
+    <div class="page-header min-height-250 border-radius-lg d-flex flex-column justify-content-end">
+        <h6 class="position-absolute z-index-3 p-3 align-self-start text-white top-0">Profile</h6>
+        <span class="mask bg-primary opacity-9"></span>
+        <div class="w-100 position-relative p-3">
+            <div class="d-flex gap-2 flex-wrap justify-content-between align-items-end">
+                <div class="d-flex align-items-center">
+                    <div class="avatar avatar-xl position-relative me-3">
+                        <div alt="profile_image" class="w-100 border-radius-lg bg-white shadow-sm">
+                            <img src="images/logo.png" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                        </div>
+                    </div>
+                    @if(employee && job){
+                    <div>
+                        <h5 class="mb-1 text-white font-weight-bolder">
+                            {{employee.firstName}}&nbsp;{{employee.lastName}}
+                        </h5>
+                        <p class="mb-0 text-white text-sm">
+                            {{job.name}}
+                            @if(isSupervisor){
+                            <span class="badge bg-gradient-dark ms-2">Supervisor</span>
+                            }
+                        </p>
+
+                    </div>
+                    }
+                </div>
+                <div class="d-flex flex-wrap align-items-center gap-2 ">
+                    <a class="btn btn-dark mb-0 flex-fill" [routerLink]="['/profile/update']">Update My
+                        Profile</a>
+                    <a class="btn btn-dark mb-0 flex-fill" [routerLink]="['/reviews']">
+                        My Reviews
+                    </a>
+                    @if(isSupervisor || isCEO){
+                    <a class="btn btn-white mb-0 flex-fill" [routerLink]="['/reviews/pending']">
+                        My Pending Reviews
+                    </a>}
+                    @if(isSupervisor){
+                    <a class="btn btn-white  mb-0 flex-fill" [routerLink]="['/profile/department/update']">Update My
+                        Department</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

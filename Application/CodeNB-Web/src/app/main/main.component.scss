@@ -1,0 +1,29 @@
+.g-sidenav-show {
+  min-height: 100vh;
+
+  .main-content {
+    position: relative;
+    height: calc(100vh - 1rem);
+    border-radius: 0.75rem;
+    overflow-x: hidden;
+
+    > * :not(#iconNavbarSidenav) {
+      height: inherit;
+    }
+
+    #iconNavbarSidenav {
+      height: fit-content;
+      position: absolute;
+      right: 0;
+      float: right;
+      text-align: end;
+      z-index: 500;
+    }
+
+    @media screen and (min-width: 1200px) {
+      #iconNavbarSidenav {
+        display: none;
+      }
+    }
+  }
+}

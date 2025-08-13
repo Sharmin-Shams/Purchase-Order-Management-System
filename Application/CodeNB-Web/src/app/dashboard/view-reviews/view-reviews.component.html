@@ -1,0 +1,98 @@
+<section class="h-100 d-flex justify-content-center align-items-center">
+    <div class="reviews col-md-5 card mb-4 mt-2">
+        <div class="card-header pb-0 px-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="mb-2">Your Performance Reviews</h6>
+                    <p class="text-secondary text-xs mb-0">Select an item from the list to view the details of your
+                        performance
+                        review.</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body pt-4 p-3">
+            @let reviews = (reviews$ | async);
+            @if(reviews){
+            @if(!reviews.length){
+            <p class="py-3 text-sm text-center font-weight-light">
+                No performance reviews have been written yet.
+            </p>
+            }
+
+            @else{
+            @for (r of reviews; track r.id) {
+            <h6 class="text-uppercase text-sm font-weight-bolder text-primary mb-2">{{r.year}} Q{{r.quarter}}</h6>
+            <ul class="list-group">
+                <li class="list-group-item border-0 ps-0 mb-2 border-radius-lg"
+                    (click)="openModal(viewReviewTemplate,r)">
+                    <a type="button" class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-1 text-xs">Review Date: {{ r.reviewDate | date: 'MMM d, y' }}</h6>
+                        <div class="d-flex align-items-center ">
+                            @if(r.isRead){
+                            <span class="badge bg-gradient-primary text-xs">Read</span>
+                            }
+                            @else{
+                            <span class="badge bg-gradient-danger text-xs">Unread</span>
+                            }
+                        </div>
+
+                    </a>
+                </li>
+            </ul>
+            }
+            }
+            }
+        </div>
+    </div>
+</section>
+<ng-template #viewReviewTemplate>
+    <div class="card h-100">
+        <div class="card-header pb-0 p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0 text-primary"> Performance Review</h6>
+                </div>
+                <button type="button" class="btn pull-right shadow-sm mb-0" aria-label="Close"
+                    (click)="modalRef?.hide()">
+                    <fa-icon [icon]="faXmark" class="text-danger"></fa-icon>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                    <strong class="text-dark">Year</strong>
+                    &nbsp; {{selectedReview.year}}
+                </li>
+                <li class="list-group-item border-0 ps-0 text-sm">
+                    <strong class="text-dark">Quarter:</strong> &nbsp; Q{{selectedReview.quarter}}
+                </li>
+                <li class="list-group-item border-0 ps-0 text-sm">
+                    <strong class="text-dark">Review Date:</strong> &nbsp;
+                    {{ selectedReview.reviewDate | date: 'MMM d, y' }}
+                </li>
+
+                <li class="list-group-item border-0 ps-0 text-sm">
+                    <strong class="text-dark">Supervisor's comment</strong>
+                    <div class="form-group mt-2">
+                        <textarea id="comment" class="form-control" [value]="selectedReview.comment" readonly>
+                            </textarea>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="list-group mb-2">
+                <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+                    <strong class="text-dark">Supervisor:</strong>
+                    &nbsp; {{selectedReview.supervisorName}}
+                </li>
+                <li class="list-group-item border-0 ps-0 text-sm">
+                    <strong class="text-dark">Rating:</strong> &nbsp;
+                    <span [ngClass]="getRatingClass(selectedReview.rating)">
+                        {{ selectedReview.rating }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</ng-template>

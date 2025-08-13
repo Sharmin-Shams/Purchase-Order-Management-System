@@ -1,0 +1,48 @@
+<section class="h-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg department-form m-auto">
+        <div class="card-header pb-0">
+            <h6 class="font-weight-bold">Add Department</h6>
+        </div>
+        <div class="card-body pt-0">
+            <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="name" class="control-label">Department Name</label>
+                    <input type="text" id="name" class="form-control" formControlName="name" [ngClass]="{ 'is-invalid': name?.touched && name?.invalid,
+                                     'is-valid': name?.touched && name?.valid }" />
+                    <div *ngIf="name?.touched && name?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('name', 'Department name')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="description"> Description</label>
+                    <textarea id="description" class="form-control" formControlName="description" [ngClass]="{ 'is-invalid': description?.touched && description?.invalid,
+                                     'is-valid': description?.touched && description?.valid }">
+                    </textarea>
+                    <div *ngIf="description?.touched && description?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('description', 'Description')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="invocationDate"> Invocation Date</label>
+                    <input type="date" id="invocationDate" class="form-control" formControlName="invocationDate"
+                        [ngClass]="{ 'is-invalid': invocationDate?.touched && invocationDate?.invalid,
+                                     'is-valid': invocationDate?.touched && invocationDate?.valid }" [min]="TODAY" />
+                    <div *ngIf="invocationDate?.touched && invocationDate?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('invocationDate', 'Invocation Date')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-end p-0">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

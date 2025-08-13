@@ -1,0 +1,196 @@
+<div *ngIf="purchaseOrder" class="card shadow-card my-2">
+  <div class="card-header">
+    <h4 class="mb-0">
+      Purchase Order #{{
+        purchaseOrder.purchaseOrderNumber.toString().padStart(8, "0")
+      }}
+    </h4>
+  </div>
+
+  <div class="card-body">
+    <!-- Metadata -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <p><strong>Created:</strong> {{ purchaseOrder.creationDate | date }}</p>
+        <p><strong>Employee:</strong> {{ purchaseOrder.employeeFullName }}</p>
+        <p><strong>Department:</strong> {{ purchaseOrder.departmentName }}</p>
+        <p>
+          <strong>Supervisor:</strong> {{ purchaseOrder.supervisorFullName }}
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Status:</strong> {{ purchaseOrder.purchaseStatus }}</p>
+        <p>
+          <strong>Subtotal:</strong> {{ purchaseOrder.subtotal | currency }}
+        </p>
+        <p><strong>Tax:</strong> {{ purchaseOrder.taxTotal | currency }}</p>
+        <p>
+          <strong>Total:</strong>
+          {{ purchaseOrder.subtotal + purchaseOrder.taxTotal | currency }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <h5 class="fw-bold mt-4">Items</h5>
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto">
+      <table class="table table-bordered table-hover">
+        <thead
+          class="thead-light"
+          style="position: sticky; top: 0; background: white"
+        >
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Justification</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Subtotal</th>
+            <th>Tax Total</th>
+            <th>Grand Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchaseOrder.items; let i = index">
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.itemDescription }}</td>
+            <td *ngIf="item.itemStatus === 'Pending' && editRowIndex === i">
+              <input
+                type="number"
+                [(ngModel)]="item.itemQuantity"
+                name="quantity{{ item.id }}"
+                class="form-control"
+                [readOnly]="editRowIndex !==i"
+                required
+                min="1"
+                #quantity ="ngModel"
+              />
+              <div *ngIf="quantity.invalid && quantity.touched" class="text-danger">
+              <div *ngIf="quantity.errors?.['required']">Quantity is required.</div>
+              <div *ngIf="quantity.errors?.['min']">Quantity must be greater than zero.</div>
+            </div>
+            </td>
+            <td *ngIf="item.itemStatus !== 'Pending' || editRowIndex !== i">
+              {{ item.itemQuantity }}
+            </td>
+
+            <td *ngIf="item.itemStatus === 'Pending' && editRowIndex === i">
+              <input
+                type="number"
+                [(ngModel)]="item.itemPrice"
+                name="price{{ item.id }}"
+                step="0.01"
+                class="form-control"
+                [readOnly]="editRowIndex !==i"
+                required
+                min="0.1"
+                #price ="ngModel"
+              />
+              <div *ngIf="price.invalid && price.touched" class="text-danger">
+              <div *ngIf="price.errors?.['required']">Price is required.</div>
+              <div *ngIf="price.errors?.['min']">price must be greater than zero.</div>
+            </div>
+            </td>
+            <td *ngIf="item.itemStatus !== 'Pending' || editRowIndex !== i">
+              {{ item.itemPrice | currency }}
+            </td>
+            <td>{{ item.itemJustification }}</td>
+            <td *ngIf="item.itemStatus === 'Pending' && editRowIndex === i">
+              <input
+                type="text"
+                [(ngModel)]="item.itemPurchaseLocation"
+                name="location{{ item.id }}"
+                class="form-control"
+                [readOnly]="editRowIndex !==i"
+                required
+                minlength="5"
+                #location ="ngModel"
+              />
+              <div *ngIf="location.invalid && location.touched" class="text-danger">
+              <div *ngIf="location.errors?.['required']">Purchase Location is required.</div>
+              <div *ngIf="location.errors?.['minlength']">Purchase Location must be at least 5 characters.</div>
+            </div>
+            </td>
+            <td *ngIf="item.itemStatus !== 'Pending' || editRowIndex !== i">
+              {{ item.itemPurchaseLocation }}
+            </td>
+            <td>{{ item.itemStatus }}</td>
+            <td>{{ item.itemPrice * item.itemQuantity | currency }}</td>
+            <td>{{ item.itemPrice * item.itemQuantity * 0.15 | currency }}</td>
+            <td>{{ item.itemPrice * item.itemQuantity * 1.15 | currency }}</td>
+            <td>
+            <div
+              *ngIf="
+                purchaseOrder.purchaseStatus !== 'Closed' &&
+                item.itemStatus === 'Pending'
+              "
+            >
+              <button
+                class="btn btn-sm me-2"
+                [ngClass]="editRowIndex === i ? 'btn-success' : 'btn-outline-primary'"
+                (click)="onEditOrSave(item, i)"
+                
+              >
+           {{ editRowIndex === i ? 'Save' : 'Edit' }}
+          </button>
+              <textarea
+                [(ngModel)]="item.modificationReason"
+                *ngIf="item.itemStatus === 'Pending' && editRowIndex === i"
+                class="form-control mt-2"
+                rows="2"
+                placeholder="Modification reason required"
+              ></textarea>
+              <button
+                class="btn btn-sm btn-outline-success me-2"
+                (click)="approve(item,i)"
+              >
+                Approve
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger me-2"
+                (click)="deny(item,i)"
+              >
+                Deny
+              </button>
+              <textarea
+                [(ngModel)]="item.denialReason"
+                class="form-control mt-2"
+                rows="2"
+                placeholder="Reason for denial (required)"
+              ></textarea>
+            </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Error Message -->
+<div *ngIf="error" class="alert alert-danger mt-3 w-100 text-center">
+  {{ error }}
+</div>
+
+<!-- Navigation Buttons -->
+<div class="card shadow-card my-2">
+  <div class="card-body d-flex gap-2 justify-content-end">
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" (click)="goTo('previous')" [disabled]="!canNavigate('previous')">Previous</button>
+  <button  class="btn btn-primary"(click)="goTo('next')" [disabled]="!canNavigate('next')">Next</button>
+    </div>
+    <button
+      class="btn btn-primary"
+      *ngIf="(canManuallyClosePO() || canCloseIfAllDenied()) && !loading"
+      (click)="closePO()"
+    >
+      Close Purchase Order
+    </button>
+    <a class="btn btn-outline-primary" [routerLink]="['/po/supervisor']"
+      >Back To Supervisor Search Purchase Order</a
+    >
+  </div>
+</div>

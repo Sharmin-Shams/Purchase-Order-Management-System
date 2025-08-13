@@ -1,0 +1,60 @@
+<section class="h-100 d-flex justify-content-center align-items-center">
+    <div class="departmentForm card mt-2 col-md-5">
+        <div class="card-body">
+            <div class="card-header p-0">
+                <h6> Delete Department</h6>
+                <p class="text-xs">Select a department from the list to delete</p>
+            </div>
+            <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()" (reset)="onFormReset()">
+                <div class="form-group">
+                    <label for="departments" class="form-label font-weight-normal">Departments</label>
+                    <select class="card form-select border-radius-md shadow-sm" id="departments" formControlName="id"
+                        (change)="loadDepartment(+id?.value)">
+                        <option value='' selected disabled>-- Select Department --</option>
+                        <option *ngFor="let dept of departments$ | async" [value]="dept.id">{{ dept.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="name" class="control-label">Department Name</label>
+                    <input type="text" id="name" class="form-control" formControlName="name" [ngClass]="{
+                                        'is-invalid': name?.touched && name?.invalid,
+                                        'border-success': true }" readonly />
+                    <div *ngIf="name?.touched && name?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('name', 'Department name')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="description"> Description</label>
+                    <textarea id="description" class="form-control" formControlName="description" [ngClass]="{
+                                        'is-invalid': description?.touched && description?.invalid,
+                                        'border-success': true }" readonly>
+                    </textarea>
+                    <div *ngIf="description?.touched && description?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('description', 'Description')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="invocationDate"> Invocation Date</label>
+                    <input type="date" id="invocationDate" class="form-control" formControlName="invocationDate"
+                        [ngClass]="{'is-invalid': invocationDate?.touched && invocationDate?.invalid,
+                                        'border-success': true }" readonly />
+                    <div *ngIf="invocationDate?.touched && invocationDate?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('invocationDate', 'Invocation Date')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer justify-content-end p-0 d-flex gap-2">
+                    <button type="reset" class="btn btn-dark">Reset</button>
+                    <button type="submit" class="btn btn-danger" [disabled]="!id?.value">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

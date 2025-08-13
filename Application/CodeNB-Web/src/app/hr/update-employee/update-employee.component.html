@@ -1,0 +1,367 @@
+<section class="h-100">
+    <div class="card mx-auto ">
+        <div class="card-header">
+            <h6>Update Employee</h6>
+        </div>
+        <div class="card-body pt-0">
+            <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p class="text-sm text-primary">Personal Information</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" formControlName="firstName" [ngClass]="{
+                                        'is-invalid': form.get('firstName')?.touched && form.get('firstName')?.invalid,
+                                        'is-valid': form.get('firstName')?.touched && form.get('firstName')?.valid
+                                      }">
+
+                                    <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('firstName', 'First name')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Middle Initial</label>
+                                    <input type="text" maxlength="1" class="form-control"
+                                        formControlName="middleInitial" [ngClass]="{
+                                'is-invalid': form.get('middleInitial')?.touched && form.get('middleInitial')?.invalid,
+                                'is-valid': form.get('middleInitial')?.touched && form.get('middleInitial')?.valid &&
+                                form.get('middleInitial')?.value
+                              }">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" formControlName="lastName" [ngClass]="{
+                                    'is-invalid': form.get('lastName')?.touched && form.get('lastName')?.invalid,
+                                    'is-valid': form.get('lastName')?.touched && form.get('lastName')?.valid
+                                }">
+
+                                <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('lastName', 'Last name')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" formControlName="doB" [ngClass]="{
+                                    'is-invalid': form.get('doB')?.touched && form.get('doB')?.invalid,
+                                    'is-valid': form.get('doB')?.touched && form.get('doB')?.valid
+                                    }" [max]="TODAY">
+                                <div *ngIf="form.get('doB')?.touched && form.get('doB')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('doB', 'Date of Birth')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" formControlName="password" [ngClass]="{
+                                        'is-invalid': form.get('password')?.touched && form.get('password')?.invalid,
+                                        'is-valid': form.get('password')?.touched && form.get('password')?.valid
+                                      }" autocomplete="new-password">
+                                <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngIf="form.get('password')?.errors?.['invalidPassword']">
+                                        Password must be at least 6
+                                        characters
+                                        with at least one uppercase letter, one number, and one special character.
+                                    </div>
+                                    <div *ngFor="let error of getControlError('password', 'Password')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="horizontal dark my-2">
+                        <p class="text-sm text-primary"> Contact Details</p>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="form-label">Street Address</label>
+                                <input type="text" class="form-control" formControlName="streetAddress" [ngClass]="{
+                                    'is-invalid': form.get('streetAddress')?.touched && form.get('streetAddress')?.invalid,
+                                    'is-valid': form.get('streetAddress')?.touched && form.get('streetAddress')?.valid
+                                    }">
+                                <div *ngIf="form.get('streetAddress')?.touched && form.get('streetAddress')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('streetAddress', 'Street address')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" formControlName="city" [ngClass]="{
+                                            'is-invalid': form.get('city')?.touched && form.get('city')?.invalid,
+                                            'is-valid': form.get('city')?.touched && form.get('city')?.valid
+                                        }">
+                                    <div *ngIf="form.get('city')?.touched && form.get('city')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('city', 'City')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Postal Code</label>
+                                    <input type="text" class="form-control" formControlName="postalCode" [ngClass]="{
+                                'is-invalid': form.get('city')?.touched && form.get('postalCode')?.invalid,
+                                'is-valid': form.get('city')?.touched && form.get('postalCode')?.valid
+                              }">
+                                    <div *ngIf="form.get('postalCode')?.touched && form.get('postalCode')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngIf="form.get('postalCode')?.errors?.['pattern']">
+                                            Postal code must be in the format A1A 1A1
+                                        </div>
+                                        <div *ngFor="let error of getControlError('postalCode', 'Postal code')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Cell Phone</label>
+                                <input type="tel" class="form-control" formControlName="cellPhone" [ngClass]="{
+                                    'is-invalid': form.get('cellPhone')?.touched && form.get('cellPhone')?.invalid,
+                                    'is-valid': form.get('cellPhone')?.touched && form.get('cellPhone')?.valid
+                                }">
+                                <div *ngIf="form.get('cellPhone')?.touched && form.get('cellPhone')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngIf="form.get('cellPhone')?.errors?.['pattern']">
+                                        Cell phone must be in the format (XXX) XXX XXXX
+                                    </div>
+                                    <div *ngFor="let error of getControlError('cellPhone', 'Cell phone')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-sm text-primary">Employment Information</p>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="form-label">Social Insurance Number</label>
+                                <input type="text" class="form-control" formControlName="sin" [ngClass]="{
+                                    'is-invalid': form.get('sin')?.touched && form.get('sin')?.invalid,
+                                    'is-valid': form.get('sin')?.touched && form.get('sin')?.valid
+                                }">
+                                <div *ngIf="form.get('sin')?.touched && form.get('sin')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngIf="form.get('sin')?.errors?.['pattern']">
+                                        Social insurance number must be in the format XXX XXX XXXX
+                                    </div>
+                                    <div *ngFor="let error of getControlError('sin', 'Social insurance number')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Work Phone</label>
+                                    <input type="tel" class="form-control" formControlName="workPhone" [ngClass]="{
+                                        'is-invalid': form.get('workPhone')?.touched && form.get('workPhone')?.invalid,
+                                        'is-valid': form.get('workPhone')?.touched && form.get('workPhone')?.valid
+                                      }">
+
+                                    <div *ngIf="form.get('workPhone')?.touched && form.get('workPhone')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngIf="form.get('workPhone')?.errors?.['pattern']">
+                                            Work phone must be in the format (XXX) XXX XXXX
+                                        </div>
+                                        <div *ngFor="let error of getControlError('workPhone', 'Work phone')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Office Location</label>
+                                    <input type="text" class="form-control" formControlName="officeLocation" [ngClass]="{
+                                    'is-invalid': form.get('officeLocation')?.touched && form.get('officeLocation')?.invalid,
+                                    'is-valid': form.get('officeLocation')?.touched && form.get('officeLocation')?.valid
+                                  }">
+                                    <div *ngIf="form.get('officeLocation')?.touched && form.get('officeLocation')?.invalid"
+                                        class="invalid-feedback">
+                                        <div *ngFor="let error of getControlError('officeLocation', 'Office location')">
+                                            {{ error }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for>Email</label>
+                                <input type="email" class="form-control" formControlName="email" [ngClass]="{
+                                'is-invalid': form.get('email')?.touched && form.get('email')?.invalid,
+                                'is-valid': form.get('email')?.touched && form.get('email')?.valid
+                              }">
+                                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('email', 'Email address')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Seniority Date</label>
+                                <input type="date" class="form-control" formControlName="seniorityDate" [ngClass]="{
+                                    'is-invalid': form.get('seniorityDate')?.touched && form.get('seniorityDate')?.invalid,
+                                    'is-valid': form.get('seniorityDate')?.touched && form.get('seniorityDate')?.valid
+                                    }">
+                                <div *ngIf="form.get('seniorityDate')?.touched && form.get('seniorityDate')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('seniorityDate', 'Seniority date')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="horizontal dark my-2">
+                            <p class="text-sm text-primary">Employment Status</p>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" formControlName="status" [ngClass]="{
+                            'is-invalid': form.get('status')?.touched && form.get('status')?.invalid,
+                            'is-valid': form.get('status')?.touched && form.get('status')?.valid && form.get('status')?.value
+                          }" (change)="onStatusChange()">
+                                    <option *ngFor="let s of EMPLOYEE_STATUS" [value]="s.value">{{ s.label }}
+                                    </option>
+                                </select>
+                                <div *ngIf="form.get('status')?.touched && form.get('status')?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('status', 'Status')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" *ngIf="status?.value == empStatusEnum.RETIRED">
+                                <label class="form-label">Retirement Date</label>
+                                <input type="date" class="form-control" formControlName="retirementDate" [ngClass]="{
+                            'is-invalid': retirementDate?.touched && retirementDate?.invalid,
+                            'is-valid': retirementDate?.touched && retirementDate?.valid
+                          }">
+
+                                <div *ngIf="retirementDate?.touched && retirementDate?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('retirementDate', 'Retirement date')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" *ngIf="status?.value == empStatusEnum.TERMINATED">
+                                <label class="form-label">Termination Date</label>
+                                <input type="date" class="form-control" formControlName="terminationDate" [ngClass]="{
+                            'is-invalid': terminationDate?.touched && terminationDate?.invalid,
+                            'is-valid': terminationDate?.touched && terminationDate?.valid
+                          }">
+
+                                <div *ngIf="terminationDate?.touched && terminationDate?.invalid"
+                                    class="invalid-feedback">
+                                    <div *ngFor="let error of getControlError('terminationDate', 'Termination date')">
+                                        {{ error }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-sm text-primary"> Job Assignment</p>
+                        <div class="form-group">
+                            <label class="form-label">Job</label>
+                            <select class="form-select" formControlName="jobID" [ngClass]="{
+                                'is-invalid': form.get('jobID')?.touched && form.get('jobID')?.invalid,
+                                'is-valid': form.get('jobID')?.touched && form.get('jobID')?.valid
+                                }" (change)="onJobChange()">
+                                <option value="" selected disabled>-- Select Job --</option>
+                                <option *ngFor="let j of jobs; trackBy: trackById" [value]="j.id" >{{ j.name }}</option>
+                            </select>
+                            <div *ngIf="form.get('jobID')?.touched && form.get('jobID')?.invalid"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of getControlError('jobID', 'Job selection')">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-check form-switch">
+                            <input type="checkbox" class="form-check-input" id="isSupervisor"
+                                formControlName="isSupervisor">
+                            <label class="form-check-label" for="isSupervisor">Is Supervisor</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Supervisor</label>
+                            <select class="form-select" formControlName="supervisorID" [ngClass]="{
+                                    'is-invalid': supervisor?.touched && supervisor?.invalid,
+                                    'is-valid': supervisor?.touched && supervisor?.valid && supervisor?.value
+                                }">
+                                <option value="" selected disabled>Select Supervisor</option>
+                                <ng-container *ngFor="let s of supervisors$ | async">
+                                    <option *ngIf="s.id !== form.get('id')?.value" [value]="s.id">
+                                        {{ s.lastName }}, {{s.firstName}} {{s?.middleInitial}}
+                                    </option>
+                                </ng-container>
+                            </select>
+                            <div *ngIf="supervisor?.touched && supervisor?.invalid" class="invalid-feedback">
+                                <div *ngFor="let error of getControlError('supervisorID', 'Supervisor selection')">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" formControlName="departmentID" [ngClass]="{
+                                'is-invalid': department?.touched && department?.invalid,
+                                'is-valid': department?.touched && department?.valid && department?.value
+                            }">
+                                <option value="" selected disabled>Select a Department</option>
+                                <option *ngFor="let dept of departments$ | async" [value]="dept.id">{{ dept.name }}
+                                </option>
+                            </select>
+                            <div *ngIf="department?.touched && department?.invalid" class="invalid-feedback">
+                                <div *ngFor="let error of getControlError('departmentID', 'Department selection')">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Job Start Date</label>
+                            <input type="date" class="form-control" formControlName="jobStartDate" [ngClass]="{
+                        'is-invalid': form.get('jobStartDate')?.touched && form.get('jobStartDate')?.invalid,
+                        'is-valid': form.get('jobStartDate')?.touched && form.get('jobStartDate')?.valid
+                      }">
+
+                            <div *ngIf="form.get('jobStartDate')?.touched && form.get('jobStartDate')?.invalid"
+                                class="invalid-feedback">
+                                <div
+                                    *ngFor="let error of getControlError('jobStartDate', 'Job start date', 'seniority date')">
+                                    {{ error }}
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="card-footer d-flex justify-content-end p-0 gap-2">
+                            <button type="reset" class="btn btn-danger mb-0" (click)="initValues(employee.id)">Reset</button>
+                            <button type="submit" class="btn btn-primary mb-0">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

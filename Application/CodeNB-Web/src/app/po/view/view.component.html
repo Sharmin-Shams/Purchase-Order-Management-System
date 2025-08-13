@@ -1,0 +1,9 @@
+<div class="card shadow-card my-2">
+  <div class="card-body d-flex gap-2">
+    <a class="btn btn-primary mb-0 text-end move-on-hover" [routerLink]="['/po/create']">Add purchase Order</a>
+    <a class="btn btn-primary mb-0 text-end move-on-hover" [routerLink]="['/po/search']">My Purchase Order</a>
+    <a *ngIf="canViewSupervisorLink" class="btn btn-primary mb-0 text-end move-on-hover" [routerLink]="['/po/supervisor']">Authorize Purchase Order</a>
+  </div>
+</div>
+
+

@@ -1,0 +1,139 @@
+<section class="h-100">
+  <div class="employee-search card shadow-xs mt-2 mx-auto">
+    <div class="card-header pb-0">
+      <h6>Employees</h6>
+    </div>
+    <div class="card-body pt-0">
+      <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-3 max-width-300">
+            <div class="form-group">
+              <label class="form-label text-xs" for="employeeId">Employee ID</label>
+              <input type="text" class="form-control form-control-sm" placeholder="Employee ID" id="employeeId"
+                formControlName="employeeId" />
+            </div>
+          </div>
+          <div class="col-md-3 max-width-300">
+            <div class="form-group">
+              <label class="form-label text-xs" for="lastName">Last name</label>
+              <input type="text" class="form-control form-control-sm" placeholder="Last name" id="lastName"
+                formControlName="lastName" />
+            </div>
+          </div>
+          <div class="col-md-3 d-flex align-items-end pt-2 justify-content-center justify-content-md-start">
+            <button type="submit" class="btn btn-sm mb-0 btn-primary">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-body pt-0">
+      <div class="card">
+        <div class="card-body pb-0">
+          <div class="emp-table-wrapper table-responsive">
+            <table class="table align-items-center mb-0">
+              <thead>
+                @if(employees){
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Last Name</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">First Name</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+                }
+              </thead>
+              <tbody>
+                @if(employees && !employees.length){
+                <tr>
+                  <td class="px-3 py-2"></td>
+                  <td class="py-3 text-xs text-start font-weight-light">No Employees found.</td>
+                </tr>
+                }
+                @else {
+                @for (e of paginatedData; track e.id) {
+                <tr>
+                  <td>
+                    <p class="px-3 py-2 text-xs text-black font-weight-bold mb-0">{{ e.lastName }}</p>
+                  </td>
+                  <td>
+                    <p class="py-2 text-xs text-black font-weight-bold mb-0">{{ e.firstName }}</p>
+                  </td>
+                  <td class="align-middle">
+                    <div class="d-flex flex-wrap gap-3 align-items-center font-weight-bold text-xs py-2">
+                      <a type="button" class="text-secondary" (click)="openModal(template, e.id)">Details</a>
+                      <a class="text-secondary" [routerLink]="['/hr/employees/update', e.id]">Update</a>
+                    </div>
+                  </td>
+                </tr>
+                }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        @if(employees && employees.length){
+        <div class="card-footer d-flex align-items-center justify-content-center justify-content-md-end">
+          <pagination [totalItems]="employees.length" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage"
+            (pageChanged)="onPageChange($event)" [customPreviousTemplate]="prevTemplate"
+            [customNextTemplate]="nextTemplate">
+          </pagination>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #prevTemplate let-disabled="disabled" let-currentPage="currentPage">
+  <span>
+    < </span>
+</ng-template>
+<ng-template #nextTemplate let-disabled="disabled" let-currentPage="currentPage">
+  <span>></span>
+</ng-template>
+
+<ng-template #template>
+  <div class="card h-100">
+    <div class="card-header pb-0 p-4">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex gap-2">
+          <fa-icon [icon]="faUser" class="me-2"></fa-icon>
+          <h6 class="mb-0 text-primary">Employee Personal Information</h6>
+        </div>
+
+        <button type="button" class="btn pull-right shadow-sm mb-0" aria-label="Close" (click)="modalRef?.hide()">
+          <fa-icon [icon]="faXmark" class="text-danger"></fa-icon>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li class="list-group-item border-0 ps-0 pt-0 text-sm">
+          <strong class="text-dark"> First name:</strong> &nbsp;
+          {{employee.firstName}}
+        </li>
+        @if(employee.middleInitial && employee.middleInitial.length){
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Middle Initial:</strong> &nbsp; {{employee.middleInitial}}
+        </li>
+        }
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Last name:</strong> &nbsp; {{employee.lastName}}
+        </li>
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Home Mailing Address :</strong> &nbsp; {{employee.mailingAddress}}
+        </li>
+
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Work Phone :</strong> &nbsp; {{employee.workPhone}}
+        </li>
+
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Cell Phone :</strong> &nbsp; {{employee.cellPhone}}
+        </li>
+
+        <li class="list-group-item border-0 ps-0 text-sm">
+          <strong class="text-dark">Work Email :</strong> &nbsp; {{employee.email}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-template>

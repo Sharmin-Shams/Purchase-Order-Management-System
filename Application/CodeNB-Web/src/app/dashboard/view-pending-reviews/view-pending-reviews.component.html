@@ -1,0 +1,123 @@
+<section class="h-100">
+    <div class="mt-2 mx-auto">
+        <div class="card-header p-4">
+            <h6>Pending Employees for Review</h6>
+        </div>
+        <div class="px-md-4">
+            @let pending = (pendingEmployees$ | async);
+            @if(pending){
+            @if(!pending.length){
+            <div class="py-3 text-sm text-center font-weight-light">
+                No pending employees for review.
+            </div>
+            }
+            @else{
+            <accordion [closeOthers]="false" [isAnimated]="true">
+                <accordion-group [panelClass]="customClass" *ngFor="let p of pending" [isOpen]="true"
+                    heading="{{p.year}} Q{{p.quarter}}">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Last
+                                        Name</th>
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        First Name</th>
+                                    <th class="text-secondary opacity-7"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (e of p.employees; track e.id) {
+                                <tr>
+                                    <td>
+                                        <p class="px-3 py-2 text-xs text-black font-weight-bold mb-0">{{ e.lastName }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="py-2 text-xs text-black font-weight-bold mb-0">{{ e.firstName }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <a type="button" class="text-xs text-secondary"
+                                            (click)="openModal(createReviewTemplate, p, e.id)">Create Review</a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </accordion-group>
+            </accordion>
+            }
+            }
+        </div>
+    </div>
+</section>
+
+<ng-template #createReviewTemplate>
+    <div class="card h-100">
+        <div class="card-header pb-0 p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="mb-0 text-primary">Create Review</h6>
+                    <span class="text-xs">For: {{employeeToReview.lastName}}, {{employeeToReview.firstName}} -
+                        {{form.get('year')?.value}} Q{{form.get('quarter')?.value}}</span>
+                </div>
+
+                <button type="button" class="btn pull-right shadow-sm mb-0" aria-label="Close"
+                    (click)="modalRef?.hide()">
+                    <fa-icon [icon]="faXmark" class="text-danger"></fa-icon>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label class="form-label" for="ratingID">Rating</label>
+                    <select id="ratingID" class="form-select" formControlName="ratingID" [ngClass]="{
+                            'is-invalid': rating?.touched && rating?.invalid,
+                            'is-valid': rating?.touched && rating?.valid && rating?.value
+                          }">
+                        <option [ngValue]="null" selected disabled>-- Select Rating --</option>
+                        <option *ngFor="let r of REVIEW_RATING" [ngValue]="r.value">{{ r.label }}
+                        </option>
+                    </select>
+                    <div *ngIf="rating?.touched && rating?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('ratingID', 'Rating')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="comment"> Comment</label>
+                    <textarea id="comment" class="form-control" formControlName="comment" [ngClass]="{ 'is-invalid': comment?.touched && comment?.invalid,
+                                     'is-valid': comment?.touched && comment?.valid }">
+                    </textarea>
+                    <div *ngIf="comment?.touched && comment?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('comment', 'Comment')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="reviewDate"> Review Date</label>
+                    <input type="date" id="reviewDate" class="form-control" formControlName="reviewDate" [ngClass]="{ 'is-invalid': reviewDate?.touched && reviewDate?.invalid,
+                                     'is-valid': reviewDate?.touched && reviewDate?.valid }" [min]="minDate"
+                        [max]="maxDate" />
+                    <div *ngIf="reviewDate?.touched && reviewDate?.invalid" class="invalid-feedback">
+                        <div *ngFor="let error of getControlError('reviewDate', 'Review Date')">
+                            {{ error }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer justify-content-end p-0 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

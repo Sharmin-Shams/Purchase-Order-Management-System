@@ -1,0 +1,86 @@
+<section class="card w-100 mx-auto" >
+  <div class="card-header">
+    <h6 class="font-weight-bold mb-0">Supervisor Search Purchase Orders</h6>
+  </div>
+<div class="p-4">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="row g-2 align-items-end">
+      <div class="col-md-2">
+       <label for="poNumber" class="form-label">PO Number</label>
+      <input type="text" formControlName="poNumber" placeholder="PO Number" class="form-control" />
+      </div>
+      <!-- <div *ngIf="searchForm.get('poNumber')?.invalid && searchForm.get('poNumber')?.touched" class="text-red-500 text-sm">
+        PO Number must be exactly 8 digits.
+      </div> -->
+      <div class="col-md-2">
+
+       <label for="employeeName" class="form-label">Employee Name</label>
+      <input type="text" formControlName="employeeName" placeholder="Employee Name" class="form-control" />
+      </div>
+      <div class="col-md-2">
+         <label for="status" class="form-label">Status</label>
+     
+      <select formControlName="status" class="form-select">
+        <option value="">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Under Review">Under Review</option>
+        <option value="Closed">Closed</option>
+      </select>
+       </div>
+       <div class="col-md-2">
+        <label for="startDate" class="form-label">Start Date</label>
+<input type="date" formControlName="startDate" class="form-control" />
+       </div>
+      <div class="col-md-2">
+         <label for="endDate" class="form-label">End Date</label>
+<input type="date" formControlName="endDate" class="form-control" />
+      </div>
+      <div class="col-md-2 d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        Search
+      </button>
+      <button type="button" (click)="onClear()" class="btn btn-secondary">
+        Clear
+      </button>
+      </div>
+    </form>
+   
+    <div *ngIf="results.length > 0" class="table-responsive mt-4">
+      <table class="table table-bordered table-hover">
+        <thead class="thead-light" style="position: sticky; top: 0; background: white;">
+          <tr>
+            <th class="border px-4 py-2">PO Number</th>
+            <th class="border px-4 py-2">Creation Date</th>
+            <th class="border px-4 py-2">Employee Name</th>
+            <th class="border px-4 py-2">Status</th>
+            <th class="border px-4 py-2">Subtotal</th>
+            <th class="border px-4 py-2">Tax</th>
+            <th class="border px-4 py-2">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr *ngFor="let po of results"> -->
+            <!-- <td class="border px-4 py-2">{{ po.poNumber }}</td> -->
+            <tr class="border px-4 py-2"*ngFor="let po of results" (click)="goToDetails(+po.poNumber)" style="cursor: pointer;">
+              <td>{{ po.poNumber.toString().padStart(8, '0') }}</td>
+            <td class="border px-4 py-2">{{ po.creationDate| date }}</td>
+            <td class="border px-4 py-2">{{ po.employeeFullName }}</td>
+            <td class="border px-4 py-2">{{ po.poStatus }}</td>
+            <td class="border px-4 py-2">{{ po.subTotal | currency }}</td>
+            <td class="border px-4 py-2">{{ po.taxTotal | currency }}</td>
+            <td class="border px-4 py-2">{{ po.grandTotal | currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+   
+    <!-- <div *ngIf="!error && results.length === 0 && searched" class="text-red-600 mt-4">
+      No matching purchase orders found.
+    </div> -->
+  </div>
+  <!-- <div *ngIf="error && results.length === 0" class="text-red-600 mt-4">
+    {{ error }}
+  </div> -->
+  </section>
+   <div *ngIf="error" class="alert alert-danger mt-4">
+      {{error}}
+    </div>

@@ -1,0 +1,171 @@
+<div *ngIf="message" class="alert alert-info">{{ message }}</div>
+<div *ngIf="errors.length > 0" class="alert alert-danger">
+  <ul>
+    <li *ngFor="let error of errors">{{ error }}</li>
+  </ul>
+</div>
+
+<section class="card min-vh-100 w-100">
+  <div class="card-header">
+    <h6 class="font-weight-bold">Create Purchase Order</h6>
+  </div>
+  <!-- <div class="card shadow-lg mb-3 w-100"> -->
+  <div class="card shadow-lg col-md-12 mb-3 mx-md-auto" style="max-width: 1200px;">
+    <div class="card-body">
+<!-- Employee Info Display -->
+<div class="card p-3 mb-3"*ngIf="employeeAssignment">
+  <p><strong>Employee:</strong>{{employeeFullName}} </p>
+  <p><strong>Department:</strong>{{departmentName}} </p>
+  <p><strong>Supervisor:</strong> {{supervisorFullName}}</p>
+  <p><strong>Date:</strong>{{ today | date:'longDate' }} </p>
+</div>
+<div class="card shadow-lg mb-3 w-100">
+<!-- <div class="card shadow-lg col-md-12 mb-3 mx-md-auto" style="max-width: 1200px;"> -->
+  <div class="card-body">
+<form #form="ngForm" (ngSubmit)="addItem(form)">
+
+  <!-- Item Name -->
+  
+    <div class="form-group mb-3">
+      <label for="itemName"  class="form-label mb-2">Item Name</label>
+   
+    <input class="form-control form-control-lg" [(ngModel)]="newItem.itemName" name="itemName" required minlength="3" maxlength="45"
+           #itemName="ngModel" placeholder="Item Name" />
+    <div *ngIf="itemName.invalid && itemName.touched" class="text-danger mt-1">
+      Item name is required and must be between 3 and 45 characters.
+    </div>
+  </div>
+
+
+  <div *ngIf="fieldErrors['itemName']" class="text-danger">
+    {{ fieldErrors['itemName'] }}
+  </div>
+  <!-- Description -->
+  <div class="form-group mb-3">
+    <label for="itemDescription"  class="form-label mb-2">Item Description</label>
+    <input class="form-control form-control-lg" [(ngModel)]="newItem.itemDescription" name="itemDescription" required minlength="5"
+           #itemDescription="ngModel" placeholder="Description" />
+    <div *ngIf="itemDescription.invalid && itemDescription.touched" class="text-danger">
+      Description is required and must be at least 5 characters.
+    </div>
+  </div>
+  <div *ngIf="fieldErrors['itemDescription']" class="text-danger">
+    {{ fieldErrors['itemDescription'] }}
+  </div>
+  <!-- Quantity -->
+  <div>
+    <label for="itemDescription"  class="form-label mb-2">Quantity</label>
+    <input class="form-control form-control-lg" type="number" [(ngModel)]="newItem.itemQuantity" name="itemQuantity" required min="1"
+           #itemQuantity="ngModel" placeholder="Quantity" />
+    <div *ngIf="itemQuantity.invalid && itemQuantity.touched" class="text-danger">
+      Quantity must be greater than zero.
+    </div>
+  </div>
+  <div *ngIf="fieldErrors['itemQuantity']" class="text-danger">
+    {{ fieldErrors['itemQuantity'] }}
+  </div>
+  <!-- Price -->
+  <div>
+    <label for="itemDescription"  class="form-label mb-2">Price</label>
+    <input  class="form-control form-control-lg"type="number" [(ngModel)]="newItem.itemPrice" name="itemPrice" required min="0.01" step="0.01"
+           #itemPrice="ngModel" placeholder="Price" />
+    <div *ngIf="itemPrice.invalid && itemPrice.touched" class="text-danger">
+      Price must be greatr than zero.
+    </div>
+  </div>
+  <div *ngIf="fieldErrors['itemPrice']" class="text-danger">
+    {{ fieldErrors['itemPrice'] }}
+  </div>
+  <!-- Justification -->
+  <div>
+    <label for="itemDescription"  class="form-label mb-2">Item Justification</label>
+    <input class="form-control form-control-lg" [(ngModel)]="newItem.itemJustification" name="itemJustification" required minlength="4"
+           #itemJustification="ngModel" placeholder="Justification" />
+    <div *ngIf="itemJustification.invalid && itemJustification.touched" class="text-danger">
+      Justification is required and must be at least 4 characters.
+    </div>
+  </div>
+  <div *ngIf="fieldErrors['itemJustification']" class="text-danger">
+    {{ fieldErrors['itemJustification'] }}
+  </div>
+  <!-- Purchase Location -->
+  <div>
+    <label for="itemDescription"  class="form-label mb-2">Location</label>
+    <input class="form-control form-control-lg" [(ngModel)]="newItem.itemPurchaseLocation" name="itemPurchaseLocation" required minlength="5"
+           #itemPurchaseLocation="ngModel" placeholder="Location" />
+    <div *ngIf="itemPurchaseLocation.invalid && itemPurchaseLocation.touched" class="text-danger">
+      Location is required and must be at least 5 characters.
+    </div>
+  </div>
+  <div *ngIf="fieldErrors['itemPurchaseLocation']" class="text-danger">
+    {{ fieldErrors['itemPurchaseLocation'] }}
+  </div>
+  <div class="card-footer text-end p-1">
+  <button class="btn btn-primary" type="submit">Add Item</button>
+</div>
+</form>
+  
+<!-- Table of Items -->
+<div  class="card shadow-lg mb-3 w-100" *ngIf="purchaseOrder.items.length > 0">
+  <div class="card-header">
+    <h6 class="font-weight-bold mb-0">Items</h6>
+  </div>
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Justification</th>
+            <th>Purchase Location</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of purchaseOrder.items; let i = index">
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.itemDescription }}</td>
+            <td>{{ item.itemQuantity }}</td>
+            <td>{{ item.itemPrice | currency }}</td>
+            <td>{{ item.itemPrice * item.itemQuantity | currency }}</td>
+            <td>{{ item.itemJustification }}</td>
+            <td>{{ item.itemPurchaseLocation }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="deleteItem(i)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Totals and Submit*ngIf="purchaseOrder.items.length > 0" -->
+<div>
+  <p>Subtotal: {{ subtotal | currency }}</p>
+  <p>Tax (15%): {{ taxTotal | currency }}</p>
+  <p><strong>Total: {{ total | currency }}</strong></p>
+  <div class="card-footer text-end p-2">
+  <button class="btn btn-primary" (click)="submit()">Submit Purchase Order</button>
+ 
+  <button class="btn btn-secondary" type="reset"  (click)="reset(form)">Clear</button>
+</div>
+</div>
+<div>
+  
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- <div class="card shadow-card my-2">
+  <div class="card-body d-flex gap-2">
+   
+      <a class="btn btn-primary mb-0 text-end move-on-hover" [routerLink]="['/po/search']">Search Purchase Order</a>
+  </div>
+</div> -->
